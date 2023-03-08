@@ -88,7 +88,7 @@ namespace MountAnalyzer
             else
             {
                 Console.WriteLine("Usage: MountAnalyzer.exe [pathToDLCFolder]");
-                Console.WriteLine("If pathToDLCFolder is not supplied, it will be assumed to be the working directory.");
+                Console.WriteLine("If pathToDLCFolder is not supplied, it will be assumed to be the working directory if it can't find the right folder via the registry.");
                 Console.WriteLine("The working directory is displayed on the left when using cmd on Windows.");
             }
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Microsoft.Win32;
 
 namespace MountAnalyzer
 {
@@ -21,11 +22,29 @@ namespace MountAnalyzer
             }
             else
             {
-                path = Directory.GetCurrentDirectory();
+                using (RegistryKey key = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node\\BioWare\\Mass Effect™ Legendary Edition"))
+                {
+                    if (key != null)
+                    {
+                        object value = key.GetValue("Install Dir");
+                        if (value != null)
+                        {
+                            path = value.ToString() + "\\Game\\ME3\\BioGame\\DLC";
+                        }
+                        else
+                        {
+                            path = Directory.GetCurrentDirectory();
+                        }
+                    }
+                    else
+                    {
+                        path = Directory.GetCurrentDirectory();
+                    }
+                }
             }
             if (Directory.Exists(path))
             {
-                List<string> mountFiles = Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "mount.dlc", SearchOption.AllDirectories).ToList();
+                List<string> mountFiles = Directory.EnumerateFiles(path, "mount.dlc", SearchOption.AllDirectories).ToList();
                 if (mountFiles.Count > 0)
                 {
                     foreach (string mountFilePath in mountFiles)
